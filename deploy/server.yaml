@@ -1,0 +1,33 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: greeter-server
+spec:
+  # Headless service so that client side load balancing can work
+  clusterIP: None
+  ports:
+  - name: grpc
+    port: 50051
+  selector:
+    app: greeter-server
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: greeter-server
+spec:
+  selector:
+    matchLabels:
+      app: greeter-server
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        app: greeter-server
+    spec:
+      containers:
+      - name: greeter-server
+        image: <image-name-here>
+        ports:
+        - containerPort: 50051
+
